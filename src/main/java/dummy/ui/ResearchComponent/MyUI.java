@@ -4,6 +4,9 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.validator.NullValidator;
+import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -34,6 +37,16 @@ public class MyUI extends UI {
 		final TextField txtAddress = new TextField("Address");
 		final TextField txtHobby = new TextField("Hobby");
 		
+		
+		txtName.setRequired(true);
+		txtName.setIcon(FontAwesome.USER);
+		txtName.addValidator(new NullValidator("Name is mandatory field",false));
+		
+		txtAddress.addValidator(new StringLengthValidator("Number of characters exceeded",5,15,true));
+		txtAddress.setIcon(FontAwesome.HOME);
+		
+		txtHobby.setIcon(FontAwesome.BEER);
+		
 		trial.addComponents(txtName,txtAddress,txtHobby);
 		trial.setMargin(true);
 		trial.setSpacing(true);
@@ -41,11 +54,25 @@ public class MyUI extends UI {
 		
 	}
 	
-	protected void paintGridLayout()
+	protected GridLayout paintGridLayout()
 	{
-		GridLayout layout_grid1 = new GridLayout(4,4);
+		GridLayout layout_grid = new GridLayout(4,4);
+		layout_grid.setSpacing(true);
+		layout_grid.setMargin(true);
 		
+		for(int i=0;i<4;i++)
+		{
+			for(int j=0;j<4;j++)
+			{
+				layout_grid.addComponent(new Button("Button"+i+j), j, i);
+				
+			}
+		}
+		
+		return layout_grid;
 	}
+	
+	
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -63,7 +90,8 @@ public class MyUI extends UI {
         layout.addComponents(name, button);
         layout.setMargin(true);
         layout.setSpacing(true);
-        layout.addComponent(paintUI());
+        //layout.addComponent(paintUI());
+       // layout.addComponent(paintGridLayout());
         
         setContent(layout);
     }
